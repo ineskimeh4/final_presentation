@@ -46,10 +46,26 @@ Ethnicity.Age = Demographics %>% filter(grepl("[years|over]$", Group))
 Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group), "Hispanic", ifelse(grepl("^White", Group), "White", "Black")))
 ```
 
+
+
+
+```
+##   Year                   State              Industry Avg.EmpLvl Avg.Pay
+## 1 2014 California -- Statewide Total, all industries   15809082   59042
+## 2 2007 California -- Statewide Total, all industries   15640575   50538
+## 3 2006 California -- Statewide Total, all industries   15503144   48345
+## 4 2008 California -- Statewide Total, all industries   15494915   51487
+## 5 2013 California -- Statewide Total, all industries   15378962   57111
+##   Pre.Recession.EmpLvl EmpLvl.change
+## 1             15332732   0.031067506
+## 2             15332732   0.020077488
+## 3             15332732   0.011114245
+## 4             15332732   0.010577551
+## 5             15332732   0.003015102
+```
+
 ---
-
-## Analysis on Unemployment Rate- Region/Industry
-
+## Analysis on Employment level- Region/Industry
 
 
 
@@ -60,13 +76,13 @@ Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group),
 
 
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
 
 ---
 
 ## Which demographic group was negatively affected the most?       
 ## in which region? 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
 
 
 

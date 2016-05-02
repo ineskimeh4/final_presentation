@@ -46,10 +46,6 @@ Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group),
 
 ```
 
----
-
-## Analysis on Unemployment Rate- Region/Industry
-
 ```{r setup, include=FALSE}
 
 knitr::opts_chunk$set(echo = FALSE)
@@ -68,6 +64,15 @@ library(cowplot)
 
 
 ```
+
+```{r,echo=FALSE,fig.width=18, fig.height=7}
+Industry.data = read.csv("~/Desktop/The citris/Industry.csv")
+head(Industry.data,5)
+```
+
+---
+## Analysis on Employment level- Region/Industry
+
 
 
 ```{r, echo=FALSE,message=F, warning=F}
@@ -143,7 +148,7 @@ theme<- theme(
 
 theme <- theme + theme(strip.text.x = element_text(size = 12))
 
-Industry.data = read.csv("~/Desktop/The citris/Industry.csv") 
+ 
 industry.plotter = function(data, indus1, indus2, indus3="", indus4="", indus5="", indus6="", title, OV= F) {
     plot = data %>% filter(Year>2006) %>% filter( Industry %in% c(indus1, indus2, indus3, indus4, indus5, indus6)) %>% ggplot(aes(x=Year, y=EmpLvl.change, color = Industry)) + geom_line() +ggtitle(title) + scale_y_continuous(labels = scales::percent) +ylab("Employment Level Change (Relative to Pre-Recession Levels") + theme + facet_wrap(facets= ~ State, nrow=2)
     if(OV){

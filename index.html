@@ -60,17 +60,31 @@ Ethnicity.Age = Demographics %&gt;% filter(grepl(&quot;[years|over]$&quot;, Grou
 Ethnicity.Age= Ethnicity.Age %&gt;% mutate(Race = ifelse(grepl(&quot;^Hispanic&quot;, Group), &quot;Hispanic&quot;, ifelse(grepl(&quot;^White&quot;, Group), &quot;White&quot;, &quot;Black&quot;)))
 </code></pre>
 
+<pre><code>##   Year                   State              Industry Avg.EmpLvl Avg.Pay
+## 1 2014 California -- Statewide Total, all industries   15809082   59042
+## 2 2007 California -- Statewide Total, all industries   15640575   50538
+## 3 2006 California -- Statewide Total, all industries   15503144   48345
+## 4 2008 California -- Statewide Total, all industries   15494915   51487
+## 5 2013 California -- Statewide Total, all industries   15378962   57111
+##   Pre.Recession.EmpLvl EmpLvl.change
+## 1             15332732   0.031067506
+## 2             15332732   0.020077488
+## 3             15332732   0.011114245
+## 4             15332732   0.010577551
+## 5             15332732   0.003015102
+</code></pre>
+
 </section>
 <section class='' data-state='' id='slide-2'>
-  <h2>Analysis on Unemployment Rate- Region/Industry</h2>
-  <p><img src="figure/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4"></p>
+  <h2>Analysis on Employment level- Region/Industry</h2>
+  <p><img src="figure/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"></p>
 
 </section>
 <section class='' data-state='' id='slide-3'>
   <h2>Which demographic group was negatively affected the most?</h2>
   <h2>in which region?</h2>
 
-<p><img src="figure/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"></p>
+<p><img src="figure/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"></p>
 
 </section>
     </div>
