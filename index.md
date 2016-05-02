@@ -48,7 +48,7 @@ Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group),
 
 ---
 
-## Analysis on Unemployment Rate-Region/Industry
+## Analysis on Unemployment Rate- Region/Industry
 
 
 
