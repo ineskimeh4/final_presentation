@@ -43,12 +43,9 @@ Ethnicity.Age = Demographics %>% filter(grepl("[years|over]$", Group))
 Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group), "Hispanic", ifelse(grepl("^White", Group), "White", "Black")))
 ```
 
+
 ---
-
-## Which demographic group was negatively affected the most?       
-## in which region? 
-
-
+## Analysis on Unemployment Rate-Industry
 
 
 
@@ -64,9 +61,18 @@ Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group),
 
 ---
 
-## Analysis on Unemployment Rate-Industry
+## Which demographic group was negatively affected the most?       
+## in which region? 
+
+
+
+
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
+
+---
+
+
 
 
 
