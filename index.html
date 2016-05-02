@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="libraries/frameworks/revealjs/css/reveal.min.css">
+  <link rel="stylesheet" href="libraries/frameworks/revealjs/css/theme/solarized.css" id="theme">
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" id="theme">
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->  <link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class='' data-state='' id='slide-1'>
+  <h2>The Impact of 2008 Economic Crisis across the U.S.</h2>
+  <p>Team Citris (Sona, Ines, Sho, Jamie)</p>
+
+<ul>
+<li><p>Which social group was negatively affected the most after 2008 crisis by unemployment rate</p></li>
+<li><p>Bureau of Labor Statistics (BLS)</p>
+
+<ul>
+<li>Demographic Data
+(<a href="http://www.bls.gov/lau/table14full">http://www.bls.gov/lau/table14full</a> + Year (last two digits) + “.xlsx”)</li>
+<li>Industry Data
+(<a href="http://www.bls.gov/cew/datatoc.htm">http://www.bls.gov/cew/datatoc.htm</a>)</li>
+</ul></li>
+<li><p>Main Variables to Investigate (2004-2014)</p>
+
+<ul>
+<li>Unemployment Rate</li>
+<li>Age, Gender, Ethnicity</li>
+<li>Industry</li>
+<li>Region</li>
+</ul></li>
+<li><p>Methods</p>
+
+<ul>
+<li>Data Merging: for loops/join</li>
+<li>Data Cleaning :regrex,filter,mutate,grepl, ifelse</li>
+</ul></li>
+</ul>
+
+<pre><code class="r">for (year in 1:11){for (i in 1:nrow(area_codes)){
+  state = area_codes[i, 2]
+  filename = paste(&quot;industry/&quot;, state, &quot; &quot;, years[year],&quot;.csv&quot;, sep = &quot;&quot;)
+  data = read.file(filename)result = rbind(result, data) }}
+
+Industry.data = Industry.data %&gt;% left_join(Pre.Recession)
+
+Ethnicity.Age = Demographics %&gt;% filter(grepl(&quot;[years|over]$&quot;, Group))
+
+Ethnicity.Age= Ethnicity.Age %&gt;% mutate(Race = ifelse(grepl(&quot;^Hispanic&quot;, Group), &quot;Hispanic&quot;, ifelse(grepl(&quot;^White&quot;, Group), &quot;White&quot;, &quot;Black&quot;)))
+</code></pre>
+
+</section>
+<section class='' data-state='' id='slide-2'>
+  <h2>Which demographic group was negatively affected the most?</h2>
+  <h2>in which region?</h2>
+
+<p><img src="figure/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4"></p>
+
+</section>
+<section class='' data-state='' id='slide-3'>
+  <h2>Analysis on Unemployment Rate-Industry</h2>
+  <p><img src="figure/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"></p>
+
+</section>
+    </div>
+  </div>
+</body>
+  <script src="libraries/frameworks/revealjs/lib/js/head.min.js"></script>
+  <script src="libraries/frameworks/revealjs/js/reveal.min.js"></script>
+  <script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    theme: Reveal.getQueryHash().theme || 'solarized', 
+    transition: Reveal.getQueryHash().transition || 'default', 
+    dependencies: [
+    // Cross-browser shim that fully implements classList -
+    // https://github.com/eligrey/classList.js/
+      { src: 'libraries/frameworks/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList;}},
+      // Zoom in and out with Alt+click
+      { src: 'libraries/frameworks/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Speaker notes
+      { src: 'libraries/frameworks/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Remote control your reveal.js presentation using a touch device
+      //{ src: 'libraries/frameworks/revealjs/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+  });
+  </script>  <!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+ 
+
+</html>
