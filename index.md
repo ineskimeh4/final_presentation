@@ -1,4 +1,5 @@
 ---
+title       :
 biglogo     : 
 framework   : revealjs
 revealjs    : {theme: solarized, transition=slide}
@@ -6,6 +7,8 @@ widgets     : []            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {selfcontained, standalone, draft}
 knit        : slidify::knit2slides
 --- 
+
+
 
 
 ## The Impact of 2008 Economic Crisis across the U.S.
@@ -43,9 +46,9 @@ Ethnicity.Age = Demographics %>% filter(grepl("[years|over]$", Group))
 Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group), "Hispanic", ifelse(grepl("^White", Group), "White", "Black")))
 ```
 
-
 ---
-## Analysis on Unemployment Rate-Industry
+
+## Analysis on Unemployment Rate-Region/Industry
 
 
 
@@ -63,22 +66,7 @@ Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group),
 
 ## Which demographic group was negatively affected the most?       
 ## in which region? 
-
-
-
-
-
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
-
----
-
-
-
-
-
-
-
-
 
 
 
