@@ -145,13 +145,13 @@ data = Industry.data1 %>% filter(Year > 2008) %>%
   mutate(EmpLvl.change= round(EmpLvl.change, digits=1)) %>% 
   mutate(EmpLvl.change= factor(EmpLvl.change, ordered=TRUE)) 
 
-map6 = State_map %>% inner_join(data %>% filter(Industry=="Manufacturing"|Industry=="Construction"), by=c("region"="State"))
-map6 %>% filter(Year==2010|Year==2009|Year==2014|Year==2013) %>% 
+map4 = State_map %>% inner_join(data %>% filter(Industry=="Service-providing"|Industry=="Goods-producing"), by=c("region"="State"))
+map4 %>% filter(Year==2010|Year==2009|Year==2014|Year==2013) %>% 
   ggplot(aes(x=long,y=lat,group=group)) +   # use map_data
   geom_polygon(aes(fill=EmpLvl.change),color=NA, alpha=0.9) +          # add fill color
   geom_path(color="grey",size=.1,alpha=.2) + coord_map("polyconic") + 
-  ggtitle("Manufacturing Vs. Construction Recovery")+ 
-  scale_fill_brewer(type="div",palette="RdBu",name="Employment level change")+ 
+  ggtitle("Service Sector vs. Goods Sector Recovery")+ 
+  scale_fill_brewer(type="div",palette="RdBu",name="Employment Level Changes")+ 
   facet_grid(Industry~Year)+coord_fixed(ratio=2.2)+theme(axis.text.x=element_blank(),axis.text.y=element_blank(),axis.title.x=element_blank(), axis.title.y=element_blank(), axis.ticks=element_blank())+ theme(
   panel.background = element_rect(fill = "honeydew2"), strip.background = element_rect(fill = "gray95", size = 2),plot.title = element_text(size=48),axis.title=element_text(size=36),axis.text=element_text(size=36),legend.title=element_text(size=36),legend.text=element_text(size=28))+theme(strip.text= element_text(size = 36))
 
