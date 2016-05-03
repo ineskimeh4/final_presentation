@@ -76,13 +76,13 @@ Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group),
 
 
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
+![plot of chunk unnamed-chunk-5](assets/fig/unnamed-chunk-5-1.png)
 
 ---
 
 ## Which demographic group was negatively affected the most?       
 ## in which region? 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
+![plot of chunk unnamed-chunk-6](assets/fig/unnamed-chunk-6-1.png)
 
 
 

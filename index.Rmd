@@ -207,8 +207,7 @@ P12<-Constr.ResBuilding(Industry.data)
 P13<-Finance.Insurance(Industry.data)
 P14<-Overview(Industry.data)
 
-P15<- Demographics.3 %>% ggplot(aes(x=Year,y=U.p,col=label))+geom_smooth(se=FALSE)+geom_vline(xintercept = 2008)+ scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+theme(
-  panel.background = element_rect(fill = "honeydew2"), strip.background = element_rect(fill = "gray95", size = 2))+ggtitle("unemployment rate change across the region")
+P15<- Demographics.3 %>% ggplot(aes(x=Year,y=U.p,col=label))+geom_smooth(se=FALSE)+geom_vline(xintercept = 2008)+ scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+theme+ggtitle("unemployment rate change across the region")
 
 #-------------
 plot_grid(P15,P10,P11,P12,P13,P14,ncol=3,nrow=2)
@@ -268,7 +267,7 @@ P7 <- ggplot(New_Ethnicity,aes(x=Year,y=U.p))+geom_smooth(aes(col=Group),se=FALS
 
 P8<- New_Ethnicity %>% filter(label=="New England"|label=="Pacific"|label=="Midwest"|label=="Midwest North") %>%
 
-  ggplot(aes(x=Year,y=U.p))+geom_smooth(aes(col=Group),se=FALSE)+facet_wrap(~label)+ggtitle("Gender unemployment rate across regions") + geom_vline(xintercept = 2008)+ylab("Unemployment Rate, %") + xlab("Year") + scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+ geom_vline(xintercept = 2008)+theme+theme(legend.position="none")
+  ggplot(aes(x=Year,y=U.p))+geom_smooth(aes(col=Group),se=FALSE)+facet_wrap(~label)+ggtitle("Ethnicity unemployment rate across regions") + geom_vline(xintercept = 2008)+ylab("Unemployment Rate, %") + xlab("Year") + scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+ geom_vline(xintercept = 2008)+theme+theme(legend.position="none")
 #---------------
 
 P9 <- Ethnicity.Age %>% filter(Group=="White, 20 to 24 years"| Group=="Black or African American, 20 to 24 years"|Group=="Hispanic or Latino ethnicity, 20 to 24 years") %>%  ggplot(aes(x=Year,y=U.p,col=Group))+geom_smooth(se=FALSE)+xlab("Year")+ylab("Unemployment Rate")+theme_grey(base_size = 12)+ggtitle("Ethnicity Unemployment across Age, 20-24") +ylab("Unemployment Rate, %") + xlab("Year") + scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+ geom_vline(xintercept = 2008)+theme+theme(legend.position="none")
