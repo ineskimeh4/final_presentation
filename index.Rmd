@@ -6,6 +6,7 @@ revealjs    : {theme: solarized, transition=slide}
 widgets     : []            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {selfcontained, standalone, draft}
 knit        : slidify::knit2slides
+output      : slidy_presentation
 --- 
 
 
@@ -223,9 +224,17 @@ P8<- New_Ethnicity %>% filter(label=="New England"|label=="Pacific"|label=="Midw
 P9 <- Ethnicity.Age %>% filter(Group=="White, 20 to 24 years"| Group=="Black or African American, 20 to 24 years"|Group=="Hispanic or Latino ethnicity, 20 to 24 years") %>%  ggplot(aes(x=Year,y=U.p,col=Group))+geom_smooth(se=FALSE)+xlab("Year")+ylab("Unemployment Rate")+ggtitle("Ethnicity Unemployment across Age, 20-24") +ylab("Unemployment Rate, %") + xlab("Year") + scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+ geom_vline(xintercept = 2008)+ theme 
 #---------------
 
+gender_across_races_facet <-Demographics %>% filter(Group == "Black or African American, men" | Group == "Black or African American, women" | Group == "Hispanic or Latino ethnicity, men" | Group == "Hispanic or Latino ethnicity, women" | Group == "White, men" | Group == "White, women" | Group == "Asian, men" | Group == "Asian, women")
+
+newGenderData <- separate(gender_across_races_facet, Group, c("Race", "Sex"), sep = ",")
+
+gender_races_visual2 <- newGenderData %>% ggplot(aes(x = Year, y = U.p)) + geom_smooth(aes(linetype = Sex, col = Race), se = FALSE) + ylab("Unemployment Percent") + ggtitle("Gender Unemployment across Races")  + theme + geom_vline(xintercept = 2008) + scale_x_continuous(breaks = c(2003, 2005, 2007, 2009, 2011, 2013))
+
+
+
 P10<- Demographics.3 %>% ggplot(aes(x=Year,y=U.p))+ geom_smooth(aes(col=label),se=FALSE)+ theme +ggtitle("Unemployment rate across regions")
 
-plot_grid(P10,P7,P8,P9, ncol = 2, nrow = 2)
+plot_grid(P10,P1,P8,gender_races_visual2, ncol = 2, nrow = 2)
 
 
 
