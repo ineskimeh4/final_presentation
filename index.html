@@ -48,18 +48,6 @@
 </ul></li>
 </ul>
 
-<pre><code class="r">for (year in 1:11){for (i in 1:nrow(area_codes)){
-  state = area_codes[i, 2]
-  filename = paste(&quot;industry/&quot;, state, &quot; &quot;, years[year],&quot;.csv&quot;, sep = &quot;&quot;)
-  data = read.file(filename)result = rbind(result, data) }}
-
-Industry.data = Industry.data %&gt;% left_join(Pre.Recession)
-
-Ethnicity.Age = Demographics %&gt;% filter(grepl(&quot;[years|over]$&quot;, Group))
-
-Ethnicity.Age= Ethnicity.Age %&gt;% mutate(Race = ifelse(grepl(&quot;^Hispanic&quot;, Group), &quot;Hispanic&quot;, ifelse(grepl(&quot;^White&quot;, Group), &quot;White&quot;, &quot;Black&quot;)))
-</code></pre>
-
 <pre><code>##   Year                   State              Industry Avg.EmpLvl Avg.Pay
 ## 1 2014 California -- Statewide Total, all industries   15809082   59042
 ## 2 2007 California -- Statewide Total, all industries   15640575   50538
@@ -77,14 +65,14 @@ Ethnicity.Age= Ethnicity.Age %&gt;% mutate(Race = ifelse(grepl(&quot;^Hispanic&q
 </section>
 <section class='' data-state='' id='slide-2'>
   <h2>Analysis on Employment level- Region/Industry</h2>
-  <p><img src="assets/fig/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"></p>
+  <p><img src="figure/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4"></p>
 
 </section>
 <section class='' data-state='' id='slide-3'>
   <h2>Which demographic group was negatively affected the most?</h2>
   <h2>in which region?</h2>
 
-<p><img src="assets/fig/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"></p>
+<p><img src="figure/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"></p>
 
 </section>
     </div>

@@ -33,18 +33,10 @@ Team Citris (Sona, Ines, Sho, Jamie)
   + Data Cleaning :regrex,filter,mutate,grepl, ifelse
   
 
-```r
-for (year in 1:11){for (i in 1:nrow(area_codes)){
-  state = area_codes[i, 2]
-  filename = paste("industry/", state, " ", years[year],".csv", sep = "")
-  data = read.file(filename)result = rbind(result, data) }}
-    
-Industry.data = Industry.data %>% left_join(Pre.Recession)
 
-Ethnicity.Age = Demographics %>% filter(grepl("[years|over]$", Group))
 
-Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group), "Hispanic", ifelse(grepl("^White", Group), "White", "Black")))
-```
+
+
 
 
 
@@ -67,22 +59,16 @@ Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group),
 ---
 ## Analysis on Employment level- Region/Industry
 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
 
 
 
-
-
-
-
-
-
-![plot of chunk unnamed-chunk-5](assets/fig/unnamed-chunk-5-1.png)
 
 ---
 
 ## Which demographic group was negatively affected the most?       
 ## in which region? 
-![plot of chunk unnamed-chunk-6](assets/fig/unnamed-chunk-6-1.png)
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
 
 
 

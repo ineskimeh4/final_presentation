@@ -32,48 +32,20 @@ Team Citris (Sona, Ines, Sho, Jamie)
   + Data Merging: for loops/join
   + Data Cleaning :regrex,filter,mutate,grepl, ifelse
   
-```{r,eval=FALSE}
-for (year in 1:11){for (i in 1:nrow(area_codes)){
-  state = area_codes[i, 2]
-  filename = paste("industry/", state, " ", years[year],".csv", sep = "")
-  data = read.file(filename)result = rbind(result, data) }}
-    
-Industry.data = Industry.data %>% left_join(Pre.Recession)
-
-Ethnicity.Age = Demographics %>% filter(grepl("[years|over]$", Group))
-
-Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group), "Hispanic", ifelse(grepl("^White", Group), "White", "Black")))
-
-```
-
 ```{r setup, include=FALSE}
 
 knitr::opts_chunk$set(echo = FALSE)
 
 library(DataComputing)
-
 library(dplyr)
-
 library(ggplot2)
-
 library(tidyr)
-
 library(devtools)
-
 library(cowplot)
-
-
+library(ggmap)
+library(maps)
+library(mapproj)
 ```
-
-```{r,echo=FALSE,fig.width=18, fig.height=7}
-Industry.data = read.csv("~/Desktop/The citris/Industry.csv")
-head(Industry.data,5)
-```
-
----
-## Analysis on Employment level- Region/Industry
-
-
 
 ```{r, echo=FALSE,message=F, warning=F}
 
@@ -82,6 +54,7 @@ Demographics.3 <- read.csv("~/Desktop/The citris/Demographics_3.csv")
 Demographics.3 <- Demographics.3[,-1]
 divisionlabels <- read.csv("~/Desktop/The citris/division labels.csv")
 Demographics.3 <- Demographics.3 %>% inner_join(divisionlabels)
+Industry.data<- read.csv("~/Desktop/The citris/Industry.csv")
 ##--------------------------------------------------------------
 
 Ethnicity.Age = Demographics %>% 
@@ -109,6 +82,10 @@ Ethnicity.Age = Ethnicity.Age %>%
   )
 
 Ethnicity.Age= Ethnicity.Age%>% mutate(Age_Group=factor(Age_Group, ordered=TRUE)) 
+
+Ethnicity.Age = Demographics %>% filter(grepl("[years|over]$", Group))
+
+Ethnicity.Age= Ethnicity.Age %>% mutate(Race = ifelse(grepl("^Hispanic", Group), "Hispanic", ifelse(grepl("^White", Group), "White", "Black")))
 ```
 
 
@@ -140,79 +117,48 @@ Sex.Age = Sex.Age %>% mutate(Age_Group=factor(Age_Group, ordered=TRUE))
 
 ```
 
+```{r,echo=FALSE,fig.width=18, fig.height=7}
+head(Industry.data,5)
+```
+
+---
+## Analysis on Employment level- Region/Industry
 
 ```{r,echo=FALSE,fig.height=16,fig.width=30}
+Industry.data1 = read.csv("~/Desktop/The citris/Industry_All_States.csv")
+Industry.data1 = Industry.data1 %>% mutate(State = tolower(State)) %>% 
+  separate(State, into=c("State", "Not.Needed"), sep="--") %>% 
+  select(-Not.Needed) %>% 
+  mutate(State = trimws(State))
+State_map = map_data(map="state")
+
+#2009 plots
+data = Industry.data1 %>% filter(Year > 2008) %>% 
+  mutate(EmpLvl.change= ifelse(EmpLvl.change < -0.5, -0.5, 
+                               ifelse(EmpLvl.change>0.5,  0.5, EmpLvl.change))) %>% 
+  mutate(EmpLvl.change= round(EmpLvl.change, digits=1)) %>% 
+  mutate(EmpLvl.change= factor(EmpLvl.change, ordered=TRUE)) 
+
+map6 = State_map %>% inner_join(data %>% filter(Industry=="Manufacturing"|Industry=="Construction"), by=c("region"="State"))
+map6 %>% filter(Year==2010|Year==2009|Year==2014|Year==2013) %>% 
+  ggplot(aes(x=long,y=lat,group=group)) +   # use map_data
+  geom_polygon(aes(fill=EmpLvl.change),color=NA, alpha=0.9) +          # add fill color
+  geom_path(color="grey",size=.1,alpha=.2) + coord_map("polyconic") + 
+  ggtitle("Manufacturing Vs. Construction Recovery")+ 
+  scale_fill_brewer(type="div",palette="RdBu",name="Employment Level Changes")+ 
+  facet_grid(Industry~Year)+coord_fixed(ratio=2.2)+theme(axis.text.x=element_blank(),axis.text.y=element_blank(),axis.title.x=element_blank(), axis.title.y=element_blank(), axis.ticks=element_blank())+ theme(
+  panel.background = element_rect(fill = "honeydew2"), strip.background = element_rect(fill = "gray95", size = 2),plot.title = element_text(size=48),axis.title=element_text(size=36),axis.text=element_text(size=36),legend.title=element_text(size=36),legend.text=element_text(size=24))+theme(strip.text= element_text(size = 36))
+
+```
+
+```{r,echo=FALSE}
 
 theme<- theme(
   panel.background = element_rect(fill = "honeydew2"), strip.background = element_rect(fill = "gray95", size = 2),plot.title = element_text(size=24),axis.title=element_text(size=18),axis.text=element_text(size=14),legend.text=element_text(size=18))
 
 theme <- theme + theme(strip.text.x = element_text(size = 12))
-
- 
-industry.plotter = function(data, indus1, indus2, indus3="", indus4="", indus5="", indus6="", title, OV= F) {
-    plot = data %>% filter(Year>2006) %>% filter( Industry %in% c(indus1, indus2, indus3, indus4, indus5, indus6)) %>% ggplot(aes(x=Year, y=EmpLvl.change, color = Industry)) + geom_line() +ggtitle(title) + scale_y_continuous(labels = scales::percent) +ylab("Employment Level Change (Relative to Pre-Recession Levels") + theme + facet_wrap(facets= ~ State, nrow=2)
-    if(OV){
-       plot = data %>% mutate(Overview= ifelse(Industry=="Total, all industries", T, F )) %>%       
-                filter(Year>2006) %>% 
-                filter( Industry %in% c(indus1, indus2, indus3, indus4, indus5, indus6)) %>% 
-                  ggplot(aes(x=Year, y=EmpLvl.change, color = Industry, linetype= Overview)) + 
-                  geom_line() +ggtitle(title) + guides(linetype =F) +
-                  scale_y_continuous(labels = scales::percent) +
-                  ylab("Employment Level Change") + 
-                  theme + facet_wrap(facets= ~ State, nrow=2) 
-    }
-  return(plot )
-}
-
-
-Goods.and.Service = function(data){
-  industry.plotter(data, indus1 = "Goods-producing", indus2= "Service-providing", indus3= "Total, all industries", title= "Goods-Producing vs. Service-Providing")
-}
-
-Manufacturing = function(data) {
-  industry.plotter(data, indus1 = "Manufacturing", indus2= "Total, all industries", title= "Manufacturing")
-}
-
-Constr.ResBuilding = function(data){
-  industry.plotter(data, indus1= "Construction", indus2= "Residential building construction", indus3= "Total, all industries", title = "Construction, Resid. Building Construction")
-} 
-  
-Finance.Insurance =  function(data) {
-  industry.plotter(data, indus1= "Finance and insurance", indus2= "Total, all industries", title = "Finannce & Insurance")
-}
-
-Overview = function(data, OV=T){
-  industry.plotter(data, indus1 ="Goods-producing", indus2= "Service-providing", indus3= "Trade, transportation, and utilities", indus4= "Public administration", indus5= "Education and health services", indus6= "Total, all industries", title = "Overview of Employment Levels at Different Industries", OV=OV)
-}
-
-#--------------------------
-
-California = Industry.data %>% filter(grepl("^Cali", State))
-
-
-Michigan = Industry.data %>% filter(grepl("^Mich", State))
-
-
-Mass = Industry.data %>% filter(grepl("^Mass", State))
-
-
-Missouri =Industry.data %>% filter(grepl("^Miss", State)) 
-
-
-NY = Industry.data %>% filter(grepl("^New", State))
-
-P10<-Goods.and.Service (Industry.data)
-P11<-Manufacturing(Industry.data)
-P12<-Constr.ResBuilding(Industry.data)
-P13<-Finance.Insurance(Industry.data)
-P14<-Overview(Industry.data)
-
-P15<- Demographics.3 %>% ggplot(aes(x=Year,y=U.p,col=label))+geom_smooth(se=FALSE)+geom_vline(xintercept = 2008)+ scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+theme+ggtitle("unemployment rate change across the region")
-
-#-------------
-plot_grid(P15,P10,P11,P12,P13,P14,ncol=3,nrow=2)
-
 ```
+
 
 ---
 
@@ -265,16 +211,15 @@ Group=="White"| Group=="Asian")
 P7 <- ggplot(New_Ethnicity,aes(x=Year,y=U.p))+geom_smooth(aes(col=Group),se=FALSE)+ ggtitle("Unemployment rate across ethnicity group")+geom_vline(xintercept = 2008)+ylab("Unemployment Rate, %") + xlab("Year") + scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+ geom_vline(xintercept = 2008)+theme
 #-----------------
 
-P8<- New_Ethnicity %>% filter(label=="New England"|label=="Pacific"|label=="Midwest"|label=="Midwest North") %>%
-
-  ggplot(aes(x=Year,y=U.p))+geom_smooth(aes(col=Group),se=FALSE)+facet_wrap(~label)+ggtitle("Ethnicity unemployment rate across regions") + geom_vline(xintercept = 2008)+ylab("Unemployment Rate, %") + xlab("Year") + scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+ geom_vline(xintercept = 2008)+theme+theme(legend.position="none")
+P8<- New_Ethnicity %>% filter(label=="New England"|label=="Pacific"|label=="Midwest"|label=="Midwest North") %>%ggplot(aes(x=Year,y=U.p))+geom_smooth(aes(col=Group),se=FALSE)+facet_wrap(~label)+ggtitle("Ethnicity unemployment rate across regions") + geom_vline(xintercept = 2008)+ylab("Unemployment Rate, %") + xlab("Year") + scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+ geom_vline(xintercept = 2008)+theme
 #---------------
 
-P9 <- Ethnicity.Age %>% filter(Group=="White, 20 to 24 years"| Group=="Black or African American, 20 to 24 years"|Group=="Hispanic or Latino ethnicity, 20 to 24 years") %>%  ggplot(aes(x=Year,y=U.p,col=Group))+geom_smooth(se=FALSE)+xlab("Year")+ylab("Unemployment Rate")+theme_grey(base_size = 12)+ggtitle("Ethnicity Unemployment across Age, 20-24") +ylab("Unemployment Rate, %") + xlab("Year") + scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+ geom_vline(xintercept = 2008)+theme+theme(legend.position="none")
+P9 <- Ethnicity.Age %>% filter(Group=="White, 20 to 24 years"| Group=="Black or African American, 20 to 24 years"|Group=="Hispanic or Latino ethnicity, 20 to 24 years") %>%  ggplot(aes(x=Year,y=U.p,col=Group))+geom_smooth(se=FALSE)+xlab("Year")+ylab("Unemployment Rate")+ggtitle("Ethnicity Unemployment across Age, 20-24") +ylab("Unemployment Rate, %") + xlab("Year") + scale_x_continuous(breaks=c(2003,2005,2007,2009,2011,2013))+scale_y_continuous(breaks=c(4,8,12,16,20,24))+ geom_vline(xintercept = 2008)+ theme 
 #---------------
 
+P10<- Demographics.3 %>% ggplot(aes(x=Year,y=U.p))+ geom_smooth(aes(col=label),se=FALSE)+ theme +ggtitle("Unemployment rate across regions")
 
-plot_grid(P1,P4,P7,P2,P6,P8, ncol = 3, nrow = 2)
+plot_grid(P10,P7,P8,P9, ncol = 2, nrow = 2)
 
 
 
